@@ -1,0 +1,60 @@
+package com.arctouch.codechallenge.dashboard.movielist
+
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProviders
+import android.os.Bundle
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.arctouch.codechallenge.R
+import com.arctouch.codechallenge.util.adapters.MoviesAdapter
+import com.arctouch.codechallenge.model.Movie
+import kotlinx.android.synthetic.main.movie_list_fragment.*
+
+class MovieListFragment: Fragment() {
+
+    var viewModel: MovieListViewModel? = null
+    var adapter: MoviesAdapter? = null
+
+    //region Lifecycle
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.movie_list_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        viewModel = ViewModelProviders.of(this).get(MovieListViewModel::class.java)
+        setupView()
+        registerObservers()
+    }
+
+    //endregion
+
+    //region Private
+
+    private fun setupView() {
+        setupMoviesAdapter()
+    }
+
+    private fun setupMoviesAdapter() {
+        adapter = MoviesAdapter()
+        recyclerView.adapter = adapter
+    }
+
+    private fun registerObservers() {
+        viewModel?.movieListLiveData?.observe(this, Observer { updateList(it) })
+        viewModel?.loadingLiveData?.observe(this, Observer { showLoading(it == true) })
+    }
+
+    private fun showLoading(show: Boolean) {
+        progressBar?.visibility = if (show) View.VISIBLE else View.GONE
+    }
+
+    private fun updateList(movieList: List<Movie>?) {
+        adapter?.movies = movieList ?: listOf()
+    }
+
+    //endregion
+}
