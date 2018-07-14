@@ -8,14 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.arctouch.codechallenge.R
-import com.arctouch.codechallenge.util.adapters.MoviesAdapter
 import com.arctouch.codechallenge.model.Movie
+import com.arctouch.codechallenge.util.adapters.MoviesAdapter
+import com.arctouch.codechallenge.util.listeners.MovieClickListener
 import kotlinx.android.synthetic.main.movie_list_fragment.*
 
 class MovieListFragment: Fragment() {
 
+    private var adapter: MoviesAdapter? = null
     var viewModel: MovieListViewModel? = null
-    var adapter: MoviesAdapter? = null
 
     //region Lifecycle
 
@@ -39,7 +40,13 @@ class MovieListFragment: Fragment() {
     }
 
     private fun setupMoviesAdapter() {
-        adapter = MoviesAdapter()
+        adapter = MoviesAdapter(object: MovieClickListener {
+            override fun onMovieClicked(id: Long) {
+                context?.let {
+                    viewModel?.onMovieClicked(it, id)
+                }
+            }
+        })
         recyclerView.adapter = adapter
     }
 

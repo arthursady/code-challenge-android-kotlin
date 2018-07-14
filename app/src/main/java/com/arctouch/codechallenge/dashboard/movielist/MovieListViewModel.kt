@@ -3,13 +3,17 @@ package com.arctouch.codechallenge.dashboard.movielist
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
+import android.content.Context
+import android.content.Intent
+import com.arctouch.codechallenge.details.DetailsActivity
 import com.arctouch.codechallenge.model.Genre
 import com.arctouch.codechallenge.model.Movie
+import com.arctouch.codechallenge.repositories.MoviesRepository
+import com.arctouch.codechallenge.util.constants.IntentConstants
 
 
 class MovieListViewModel: ViewModel() {
     private val genres: ArrayList<Genre> = arrayListOf()
-    private val moviesRepository = MoviesRepository()
 
     val movieListLiveData = MediatorLiveData<List<Movie>>()
     val loadingLiveData = MutableLiveData<Boolean>()
@@ -17,7 +21,7 @@ class MovieListViewModel: ViewModel() {
     init {
         loadingLiveData.value = true
 
-        movieListLiveData.addSource(moviesRepository.genresLiveData, {
+        movieListLiveData.addSource(MoviesRepository.genresLiveData, {
             it?.let {
                 this.genres.addAll(it)
             }
@@ -29,7 +33,7 @@ class MovieListViewModel: ViewModel() {
             }
         })
 
-        movieListLiveData.addSource(moviesRepository.moviesLiveData, { newMovies ->
+        movieListLiveData.addSource(MoviesRepository.moviesLiveData, { newMovies ->
             var moviesWithGenres: ArrayList<Movie> = ArrayList()
             movieListLiveData.value?.let { movies ->
                 moviesWithGenres = ArrayList(movies.map { movie ->
@@ -44,5 +48,14 @@ class MovieListViewModel: ViewModel() {
             loadingLiveData.value = false
             movieListLiveData.value = moviesWithGenres
         })
+
+        MoviesRepository.fetchGenres()
+        MoviesRepository.fetchMoviesList()
+    }
+
+    fun onMovieClicked(context: Context, id: Long) {
+        val intent = Intent(context, DetailsActivity::class.java)
+        intent.putExtra(IntentConstants.MOVIE_ID, id)
+        context.startActivity(intent)
     }
 }

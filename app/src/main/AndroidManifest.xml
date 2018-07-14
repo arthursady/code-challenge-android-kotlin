@@ -21,6 +21,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name="com.arctouch.codechallenge.details.DetailsActivity"/>
+
     </application>
 
 </manifest>
