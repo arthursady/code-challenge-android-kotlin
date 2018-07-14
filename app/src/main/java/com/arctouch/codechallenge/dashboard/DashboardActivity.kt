@@ -1,17 +1,16 @@
 package com.arctouch.codechallenge.dashboard
 
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import com.arctouch.codechallenge.R
-import com.arctouch.codechallenge.base.BaseActivity
 import com.arctouch.codechallenge.dashboard.movielist.MovieListFragment
 
-class DashboardActivity: BaseActivity() {
+class DashboardActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dashboard_activity)
         setupView()
-
     }
 
     //region Private
@@ -21,7 +20,9 @@ class DashboardActivity: BaseActivity() {
     }
 
     private fun setupMovieListFragment() {
-        supportFragmentManager.beginTransaction().add(R.id.fragmentContainerFrameLayout, MovieListFragment()).commit()
+        if (supportFragmentManager.fragments.isEmpty()) {
+            supportFragmentManager.beginTransaction().add(R.id.fragmentContainerFrameLayout, MovieListFragment()).commit()
+        }
     }
 
     //endregion
