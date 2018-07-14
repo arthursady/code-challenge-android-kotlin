@@ -7,9 +7,11 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.arctouch.codechallenge.R
 import com.arctouch.codechallenge.model.Movie
 import com.arctouch.codechallenge.util.adapters.MoviesAdapter
+import com.arctouch.codechallenge.util.helpers.PaginationHelper
 import com.arctouch.codechallenge.util.listeners.MovieClickListener
 import kotlinx.android.synthetic.main.movie_list_fragment.*
 
@@ -48,11 +50,17 @@ class MovieListFragment: Fragment() {
             }
         })
         recyclerView.adapter = adapter
+        recyclerView.addOnScrollListener(PaginationHelper(object: PaginationHelper.PaginationListener {
+            override fun onPaginationTriggered() {
+                viewModel?.paginationTriggered()
+            }
+        }))
     }
 
     private fun registerObservers() {
         viewModel?.movieListLiveData?.observe(this, Observer { updateList(it) })
         viewModel?.loadingLiveData?.observe(this, Observer { showLoading(it == true) })
+        viewModel?.lastPageLiveData?.observe(this, Observer { it?.let { Toast.makeText(activity, getString(it), Toast.LENGTH_SHORT).show() } })
     }
 
     private fun showLoading(show: Boolean) {

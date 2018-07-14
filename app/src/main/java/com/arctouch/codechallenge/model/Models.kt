@@ -9,7 +9,7 @@ data class Genre(val id: Int, val name: String)
 data class UpcomingMoviesResponse(
     val page: Int,
     val results: List<Movie>,
-    @Json(name = "total_pages") val totalPages: Int,
+    @Json(name = "total_pages") val totalPages: Long,
     @Json(name = "total_results") val totalResults: Int
 )
 

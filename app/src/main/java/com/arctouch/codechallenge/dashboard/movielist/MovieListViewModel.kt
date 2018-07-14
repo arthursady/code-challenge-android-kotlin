@@ -1,7 +1,6 @@
 package com.arctouch.codechallenge.dashboard.movielist
 
 import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.content.Context
 import android.content.Intent
@@ -16,7 +15,8 @@ class MovieListViewModel: ViewModel() {
     private val genres: ArrayList<Genre> = arrayListOf()
 
     val movieListLiveData = MediatorLiveData<List<Movie>>()
-    val loadingLiveData = MutableLiveData<Boolean>()
+    val loadingLiveData = MediatorLiveData<Boolean>()
+    val lastPageLiveData = MediatorLiveData<Int>()
 
     init {
         loadingLiveData.value = true
@@ -49,6 +49,9 @@ class MovieListViewModel: ViewModel() {
             movieListLiveData.value = moviesWithGenres
         })
 
+        lastPageLiveData.addSource(MoviesRepository.lastPageLiveData, { it?.let { lastPageLiveData.value = it } })
+        loadingLiveData.addSource(MoviesRepository.loadingLiveData, { loadingLiveData.value = it })
+
         MoviesRepository.fetchGenres()
         MoviesRepository.fetchMoviesList()
     }
@@ -57,5 +60,9 @@ class MovieListViewModel: ViewModel() {
         val intent = Intent(context, DetailsActivity::class.java)
         intent.putExtra(IntentConstants.MOVIE_ID, id)
         context.startActivity(intent)
+    }
+
+    fun paginationTriggered() {
+        MoviesRepository.fetchMoviesList()
     }
 }
