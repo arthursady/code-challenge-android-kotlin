@@ -1,4 +1,4 @@
-package com.arctouch.codechallenge.home
+package com.arctouch.codechallenge.util.adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -11,7 +11,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import kotlinx.android.synthetic.main.movie_item.view.*
 
-class HomeAdapter(private val movies: List<Movie>) : RecyclerView.Adapter<HomeAdapter.ViewHolder>() {
+class MoviesAdapter() : RecyclerView.Adapter<MoviesAdapter.ViewHolder>() {
+
+    var movies: List<Movie> = listOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
