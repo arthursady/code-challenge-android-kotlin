@@ -1,12 +1,12 @@
 package com.arctouch.codechallenge.details
 
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import com.arctouch.codechallenge.R
-import com.arctouch.codechallenge.base.BaseActivity
 import com.arctouch.codechallenge.details.detailsFragment.DetailsFragment
 import com.arctouch.codechallenge.util.constants.IntentConstants
 
-class DetailsActivity: BaseActivity() {
+class DetailsActivity: AppCompatActivity() {
 
     //region Lifecycle
 
