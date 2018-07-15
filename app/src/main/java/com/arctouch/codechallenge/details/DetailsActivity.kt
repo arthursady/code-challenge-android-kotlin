@@ -22,11 +22,13 @@ class DetailsActivity: AppCompatActivity() {
     //region Private
 
     private fun setupDetailsFragment(id: Long) {
-        val bundle = Bundle()
-        bundle.putLong(IntentConstants.MOVIE_ID, id)
-        val fragment = DetailsFragment()
-        fragment.arguments = bundle
-        supportFragmentManager.beginTransaction().add(R.id.fragmentContainerFrameLayout, fragment).commit()
+        if (supportFragmentManager.fragments.isEmpty()) {
+            val bundle = Bundle()
+            bundle.putLong(IntentConstants.MOVIE_ID, id)
+            val fragment = DetailsFragment()
+            fragment.arguments = bundle
+            supportFragmentManager.beginTransaction().add(R.id.fragmentContainerFrameLayout, fragment).commit()
+        }
     }
 
     //endregion

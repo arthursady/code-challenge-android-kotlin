@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="backdrop_width">300dp</dimen>
+    <dimen name="backdrop_height">120dp</dimen>
+    <dimen name="poster_height">80dp</dimen>
+    <dimen name="poster_width">60dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_regular">16dp</dimen>
+    <dimen name="margin_medium">24dp</dimen>
+    <dimen name="titleTextSize">16sp</dimen>
+    <dimen name="subTitleTextSize">14sp</dimen>
+    <dimen name="textSize">12sp</dimen>
+</resources>
