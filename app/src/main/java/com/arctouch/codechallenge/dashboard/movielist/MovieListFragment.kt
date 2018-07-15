@@ -15,12 +15,13 @@ import com.arctouch.codechallenge.util.extensions.setListener
 import com.arctouch.codechallenge.util.helpers.PaginationHelper
 import com.arctouch.codechallenge.util.helpers.mainThread
 import com.arctouch.codechallenge.util.listeners.MovieClickListener
+import com.arctouch.codechallenge.viewmodels.MovieViewModel
 import kotlinx.android.synthetic.main.movie_list_fragment.*
 
 class MovieListFragment: Fragment() {
 
     private var adapter: MoviesAdapter? = null
-    var viewModel: MovieListViewModel? = null
+    var viewModel: MovieViewModel? = null
     var searchView: SearchView? = null
 
     //region Lifecycle
@@ -36,7 +37,7 @@ class MovieListFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(MovieListViewModel::class.java)
+        activity?.let { viewModel = ViewModelProviders.of(it).get(MovieViewModel::class.java) }
         setupView()
         registerObservers()
     }
@@ -71,7 +72,7 @@ class MovieListFragment: Fragment() {
         adapter = MoviesAdapter(object: MovieClickListener {
             override fun onMovieClicked(id: Long) {
                 context?.let {
-                    viewModel?.onMovieClicked(it, id)
+                    viewModel?.onMovieClicked(id)
                 }
             }
         })

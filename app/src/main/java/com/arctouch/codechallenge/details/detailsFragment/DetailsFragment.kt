@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.arctouch.codechallenge.R
+import com.arctouch.codechallenge.viewmodels.MovieViewModel
 import com.arctouch.codechallenge.model.Movie
 import com.arctouch.codechallenge.util.MovieImageUrlBuilder
 import com.arctouch.codechallenge.util.constants.IntentConstants
@@ -17,7 +18,7 @@ import kotlinx.android.synthetic.main.details_fragment.*
 
 class DetailsFragment: Fragment() {
 
-    private var viewModel: DetailsViewModel? = null
+    private var viewModel: MovieViewModel? = null
 
     private var movieId: Long? = null
 
@@ -30,7 +31,7 @@ class DetailsFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(DetailsViewModel::class.java)
+        activity?.let { viewModel = ViewModelProviders.of(it).get(MovieViewModel::class.java) }
         movieId?.let { viewModel?.fetchSelectedMovie(it) }
         registerObservers()
     }
