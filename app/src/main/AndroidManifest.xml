@@ -20,7 +20,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.arctouch.codechallenge.details.DetailsActivity"/>
+        <activity android:name="com.arctouch.codechallenge.details.DetailsActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
 
     </application>
 
