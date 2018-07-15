@@ -108,15 +108,18 @@ object MoviesRepository {
             RetrofitHelper.getApi()?.movie(id, TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE)
                     ?.subscribeOn(Schedulers.io())
                     ?.observeOn(AndroidSchedulers.mainThread())
-                    ?.subscribe({
-                        selectedMovieLiveData.value = it
+                    ?.subscribe({ movie ->
+                        selectedMovieLiveData.value = makeMovieWithGenre(movie)
                     }, {
                         Log.e("API", "Could not fetch genres list", it)
                     })
         } else {
-            selectedMovieLiveData.value = selectedMovie
+            selectedMovieLiveData.value = makeMovieWithGenre(selectedMovie)
         }
+    }
 
+    private fun makeMovieWithGenre(movie: Movie): Movie {
+        return movie.copy(genres = genresLiveData.value?.filter { movie.genreIds?.contains(it.id) == true })
     }
 
 }
