@@ -54,6 +54,9 @@ class MovieListFragment: Fragment() {
         searchView?.setListener { text ->
             Log.d("SEARCH", text)
             mainThread {
+                // Some changes on the view model or repository live data must be performed in the main thread
+                // if this call is done outside it that will result in a crash due to live data access issues,
+                // so be careful with this call.
                 viewModel?.onSearchTextChange(text ?: "")
             }
         }
