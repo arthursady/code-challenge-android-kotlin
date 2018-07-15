@@ -22,4 +22,12 @@ data class Movie(
     @Json(name = "backdrop_path") val backdropPath: String?,
     @Json(name = "release_date") val releaseDate: String?,
     @Json(name = "overview") val overview: String?
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        return this.title == (other as? Movie)?.title
+    }
+
+    override fun hashCode(): Int {
+        return this.title.length
+    }
+}

@@ -34,17 +34,9 @@ class MovieListViewModel: ViewModel() {
         })
 
         movieListLiveData.addSource(MoviesRepository.moviesLiveData, { newMovies ->
-            var moviesWithGenres: ArrayList<Movie> = ArrayList()
-            movieListLiveData.value?.let { movies ->
-                moviesWithGenres = ArrayList(movies.map { movie ->
-                    movie.copy(genres = genres.filter { movie.genreIds?.contains(it.id) == true })
-                })
-            }
-            newMovies?.let {
-                moviesWithGenres.addAll(it.map { movie ->
-                    movie.copy(genres = genres.filter { movie.genreIds?.contains(it.id) == true })
-                })
-            }
+            val moviesWithGenres: ArrayList<Movie> = ArrayList(newMovies?.map { movie ->
+                movie.copy(genres = genres.filter { movie.genreIds?.contains(it.id) == true })
+            })
             loadingLiveData.value = false
             movieListLiveData.value = moviesWithGenres
         })
@@ -64,5 +56,9 @@ class MovieListViewModel: ViewModel() {
 
     fun paginationTriggered() {
         MoviesRepository.fetchMoviesList()
+    }
+
+    fun onSearchTextChange(text: String) {
+        MoviesRepository.searchText = text
     }
 }
