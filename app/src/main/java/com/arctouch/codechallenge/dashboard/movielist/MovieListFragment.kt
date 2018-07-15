@@ -4,14 +4,16 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.SearchView
+import android.util.Log
+import android.view.*
 import android.widget.Toast
 import com.arctouch.codechallenge.R
 import com.arctouch.codechallenge.model.Movie
 import com.arctouch.codechallenge.util.adapters.MoviesAdapter
+import com.arctouch.codechallenge.util.extensions.setListener
 import com.arctouch.codechallenge.util.helpers.PaginationHelper
+import com.arctouch.codechallenge.util.helpers.mainThread
 import com.arctouch.codechallenge.util.listeners.MovieClickListener
 import kotlinx.android.synthetic.main.movie_list_fragment.*
 
@@ -19,6 +21,7 @@ class MovieListFragment: Fragment() {
 
     private var adapter: MoviesAdapter? = null
     var viewModel: MovieListViewModel? = null
+    var searchView: SearchView? = null
 
     //region Lifecycle
 
@@ -26,11 +29,34 @@ class MovieListFragment: Fragment() {
         return inflater.inflate(R.layout.movie_list_fragment, container, false)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(MovieListViewModel::class.java)
         setupView()
         registerObservers()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater?.inflate(R.menu.search, menu)
+        val searchItem = menu?.findItem(R.id.btnSearch)
+
+        searchItem?.let {
+            searchView = it.actionView as SearchView
+        }
+
+        searchView?.setListener { text ->
+            Log.d("SEARCH", text)
+            mainThread {
+                viewModel?.onSearchTextChange(text ?: "")
+            }
+        }
+
     }
 
     //endregion
